@@ -2,7 +2,7 @@ FROM gcr.io/hoprassociation/bitnami-discourse:node-16
 
 
 RUN  apt-get update && \
-     apt -y install build-essential libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libreadline-dev libssl-dev zlib1g-dev libsnappy-dev libpq-dev curl && \
+     apt -y install build-essential libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libreadline-dev libssl-dev zlib1g-dev libsnappy-dev libpq-dev cmake pkg-config curl && \
      apt-get clean && \
      rm -rf /var/lib/apt/lists /var/cache/apt/archives
 RUN rm -rf /opt/bitnami/discourse && \
@@ -18,6 +18,12 @@ RUN rm -rf /opt/bitnami/discourse && \
     chown -R discourse:root /opt/bitnami/discourse/app/assets/javascripts/node_modules && \
     chmod 774 /opt/bitnami/discourse/app/assets/javascripts/node_modules/.bin/ember
 
-
+RUN PLUGINS=(https://github.com/discourse/discourse-cakeday.git https://github.com/discourse/discourse-checklist.git https://github.com/discourse/discourse-data-explorer.git https://github.com/discourse/discourse-footnote.git https://github.com/paviliondev/discourse-quick-messages.git https://github.com/discourse/discourse-solved.git https://github.com/discourse/discourse-spoiler-alert.git https://github.com/discourse/discourse-voting.git) && \
+    for plugin in ${PLUGINS[@]}; do \
+      gosu discourse bash -c "RAILS_ENV=production bundle exec rake plugin:install repo=${plugin}"; \
+    done && \
+    gosu discourse bash -c "RAILS_ENV=production LOAD_PLUGINS=0 bundle exec rake plugin:pull_compatible_all" && \
+    gosu discourse bash -c "RAILS_ENV=production bundle exec rake assets:precompile" && \
+    chown -R discourse:root /opt/bitnami/discourse/plugins/
 
 

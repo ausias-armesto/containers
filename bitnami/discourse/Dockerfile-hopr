@@ -1,0 +1,6 @@
+FROM gcr.io/hoprassociation/discourse:no-entrypoint
+EXPOSE 3000
+
+USER root
+ENTRYPOINT [ "/opt/bitnami/scripts/discourse/entrypoint.sh" ]
+CMD [ "/opt/bitnami/scripts/discourse/run.sh" ]

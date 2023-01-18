@@ -26,7 +26,7 @@ RUN mkdir -p /tmp/bitnami/pkg/cache/ && cd /tmp/bitnami/pkg/cache/ && \
       "wait-for-port-1.0.5-1-linux-${OS_ARCH}-debian-11" \
       "ruby-2.7.7-0-linux-${OS_ARCH}-debian-11" \
       "postgresql-client-15.1.0-0-linux-${OS_ARCH}-debian-11" \
-      "node-14.21.2-0-linux-${OS_ARCH}-debian-11" \
+      "node-16.19.0-0-linux-${OS_ARCH}-debian-11" \
       "brotli-1.0.9-154-linux-${OS_ARCH}-debian-11" \
       "gosu-1.16.0-0-linux-${OS_ARCH}-debian-11" \
       "discourse-2.8.13-0-linux-${OS_ARCH}-debian-11" \

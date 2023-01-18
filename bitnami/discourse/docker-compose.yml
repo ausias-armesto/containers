@@ -42,25 +42,23 @@ services:
       - POSTGRESQL_CLIENT_POSTGRES_USER=postgres
       - POSTGRESQL_CLIENT_CREATE_DATABASE_NAME=bitnami_discourse
       - POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS=hstore,pg_trgm
-    entrypoint: /bin/bash 
-    command: -c "sleep 99999999"
-#  sidekiq:
-#    image: docker.io/bitnami/discourse:2
-#    depends_on:
-#      - discourse
-#    volumes:
-#      - 'sidekiq_data:/bitnami/discourse'
-#    command: /opt/bitnami/scripts/discourse-sidekiq/run.sh
-#    environment:
-#      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-#      - ALLOW_EMPTY_PASSWORD=yes
-#      - DISCOURSE_HOST=www.example.com
-#      - DISCOURSE_DATABASE_HOST=postgresql
-#      - DISCOURSE_DATABASE_PORT_NUMBER=5432
-#      - DISCOURSE_DATABASE_USER=bn_discourse
-#      - DISCOURSE_DATABASE_NAME=bitnami_discourse
-#      - DISCOURSE_REDIS_HOST=redis
-#      - DISCOURSE_REDIS_PORT_NUMBER=6379
+  sidekiq:
+    image: gcr.io/hoprassociation/discourse:3.0.0-debian-11
+    depends_on:
+      - discourse
+    volumes:
+      - 'sidekiq_data:/bitnami/discourse'
+    command: /opt/bitnami/scripts/discourse-sidekiq/run.sh
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - DISCOURSE_HOST=www.example.com
+      - DISCOURSE_DATABASE_HOST=postgresql
+      - DISCOURSE_DATABASE_PORT_NUMBER=5432
+      - DISCOURSE_DATABASE_USER=bn_discourse
+      - DISCOURSE_DATABASE_NAME=bitnami_discourse
+      - DISCOURSE_REDIS_HOST=redis
+      - DISCOURSE_REDIS_PORT_NUMBER=6379
 volumes:
   postgresql_data:
     driver: local

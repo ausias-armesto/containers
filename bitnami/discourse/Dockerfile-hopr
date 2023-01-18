@@ -1,6 +1,23 @@
-FROM gcr.io/hoprassociation/discourse:no-entrypoint
-EXPOSE 3000
+FROM gcr.io/hoprassociation/bitnami-discourse:node-16
 
-USER root
-ENTRYPOINT [ "/opt/bitnami/scripts/discourse/entrypoint.sh" ]
-CMD [ "/opt/bitnami/scripts/discourse/run.sh" ]
+
+RUN  apt-get update && \
+     apt -y install build-essential libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libreadline-dev libssl-dev zlib1g-dev libsnappy-dev libpq-dev curl && \
+     apt-get clean && \
+     rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN rm -rf /opt/bitnami/discourse && \
+    cd /opt/bitnami && \
+    git clone --depth 1 -b feature/bitnami --single-branch https://github.com/ausias-armesto/discourse.git && \
+    cd discourse && \
+    bundle install && \
+    yarn install && \
+    chmod g+rwX /opt/bitnami && \
+    /opt/bitnami/ruby/bin/gem install --force bundler -v '< 2' && \
+    /opt/bitnami/scripts/discourse/postunpack.sh && \
+    chown -R discourse:discourse /home/discourse && \
+    chown -R discourse:root /opt/bitnami/discourse/app/assets/javascripts/node_modules && \
+    chmod 774 /opt/bitnami/discourse/app/assets/javascripts/node_modules/.bin/ember
+
+
+
+

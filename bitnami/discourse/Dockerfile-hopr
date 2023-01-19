@@ -22,7 +22,6 @@ RUN PLUGINS=(https://github.com/discourse/discourse-cakeday.git https://github.c
     for plugin in ${PLUGINS[@]}; do \
       gosu discourse bash -c "RAILS_ENV=production bundle exec rake plugin:install repo=${plugin}"; \
     done && \
-    gosu discourse bash -c "RAILS_ENV=production LOAD_PLUGINS=0 bundle exec rake plugin:pull_compatible_all" && \
     gosu discourse bash -c "RAILS_ENV=production bundle exec rake assets:precompile" && \
     chown -R discourse:root /opt/bitnami/discourse/plugins/
 
